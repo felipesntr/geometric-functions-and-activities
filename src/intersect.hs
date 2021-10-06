@@ -39,3 +39,6 @@ intersect
       True
     -- falta as condições de intersecção das projeções...
     | otherwise = False
+
+intersectLinePoly :: Line -> Poly -> Bool
+intersectLinePoly line poly = or [line `intersect` side | side <- zip poly (tail poly)]

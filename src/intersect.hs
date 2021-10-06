@@ -1,6 +1,6 @@
 type Point = (Float, Float)
 
-type Poly = [Point]
+type Polygon = [Point]
 
 type Line = (Point, Point)
 
@@ -40,5 +40,5 @@ intersect
     -- falta as condições de intersecção das projeções...
     | otherwise = False
 
-intersectLinePoly :: Line -> Poly -> Bool
-intersectLinePoly line poly = or [line `intersect` side | side <- zip poly (tail poly)]
+intersectLinePoly :: Line -> Polygon -> Bool
+intersectLinePoly line polygon = or [line `intersect` side | side <- zip polygon (tail polygon)]

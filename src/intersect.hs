@@ -2,8 +2,15 @@ type Point = (Float, Float)
 
 type Poly = [Point]
 
-type Line = [Point]
+type Line = (Point, Point)
 
+{-
+    m>0, a orientação é anti-horária
+    m<0, a orientação é horária
+    m=0, é colinear
+-}
+
+-- | The 'orientation' function
 orientation :: Point -> Point -> Point -> Int
 orientation (x_1, y_1) (x_2, y_2) (x_3, y_3)
   | m > 0 = 1
@@ -17,11 +24,18 @@ orientation (x_1, y_1) (x_2, y_2) (x_3, y_3)
 
 -- (a, b, c) = a * x + b * y + c = 0
 
--- -- | The 'intersect' function
--- intersect :: Line -> Line -> Bool
--- intersect
---   [p_1, q_1]
---   [p_2, q_2]
---     | orientation p_1 q_1 p_2 /= orientation p_1 q_1 q_2
---         && orientation p_2 q_2 p_1 /= orientation p_2 q_2 q_1 =
---       True
+-- | The 'intersect' function
+intersect :: Line -> Line -> Bool
+intersect
+  (p_1, q_1)
+  (p_2, q_2)
+    | orientation p_1 q_1 p_2 /= orientation p_1 q_1 q_2
+        && orientation p_2 q_2 p_1 /= orientation p_2 q_2 q_1 =
+      True
+    | orientation p_1 q_1 p_2 == 0
+        && orientation p_1 q_1 q_2 == 0
+        && orientation p_2 q_2 p_1 == 0
+        && orientation p_2 q_2 q_1 == 0 =
+      True
+    -- falta as condições de intersecção das projeções...
+    | otherwise = False

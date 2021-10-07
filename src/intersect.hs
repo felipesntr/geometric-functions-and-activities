@@ -22,8 +22,6 @@ orientation (x_1, y_1) (x_2, y_2) (x_3, y_3)
     bc = (x_3 - x_2, y_3 - y_2)
     vetorial (v_x, v_y) (w_x, w_y) = v_x * w_y - v_y * w_x
 
--- (a, b, c) = a * x + b * y + c = 0
-
 -- | The 'intersect' function
 intersect :: Line -> Line -> Bool
 intersect

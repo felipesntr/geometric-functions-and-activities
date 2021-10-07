@@ -4,13 +4,15 @@ type Polygon = [Point]
 
 type Line = (Point, Point)
 
+
+-- 1
 {-
-    m>0, a orientação é anti-horária
-    m<0, a orientação é horária
-    m=0, é colinear
+    m > 0, orientation is counterclockwise
+    m < 0, orientation is clockwise
+    m = 0, is collinear
 -}
 
--- | The 'orientation' function
+-- | The 'orientation' function checks the orientation of three points.
 orientation :: Point -> Point -> Point -> Int
 orientation (x_1, y_1) (x_2, y_2) (x_3, y_3)
   | m > 0 = 1
@@ -22,9 +24,9 @@ orientation (x_1, y_1) (x_2, y_2) (x_3, y_3)
     bc = (x_3 - x_2, y_3 - y_2)
     vetorial (v_x, v_y) (w_x, w_y) = v_x * w_y - v_y * w_x
 
--- | The 'intersect' function
-intersect :: Line -> Line -> Bool
-intersect
+-- | The 'intersectsTwoLines' function checks whether the two lines intersect.
+intersectsTwoLines :: Line -> Line -> Bool
+intersectsTwoLines
   (p_1, q_1)
   (p_2, q_2)
     | orientation p_1 q_1 p_2 /= orientation p_1 q_1 q_2
@@ -35,8 +37,24 @@ intersect
         && orientation p_2 q_2 p_1 == 0
         && orientation p_2 q_2 q_1 == 0 =
       True
-    -- falta as condições de intersecção das projeções...
+    -- the intersection conditions of the projections are still missing..
     | otherwise = False
 
-intersectLinePoly :: Line -> Polygon -> Bool
-intersectLinePoly line polygon = or [line `intersect` side | side <- zip polygon (tail polygon)]
+-- 2
+
+-- | The 'intersectsLinePolygons' checks whether a line intersects a polygon.
+intersectsLinePolygons :: Line -> Polygon -> Bool
+intersectsLinePolygons line polygon = 
+  or [line `intersectsTwoLines` side | side <- zip polygon (tail polygon)]
+
+
+-- 3
+
+-- | The 'intersectsTwoPolygons' checks whether a polygon intersects another polygon.
+intersectsTwoPolygons :: Polygon -> Polygon -> Bool
+intersectsTwoPolygons polygon_1 polygon_2 = 
+  or [ intersectsLinePolygons sideOfPolygon1 polygon_2 | sideOfPolygon1 <- zip polygon_1 (tail polygon_1) ]
+
+
+-- 4
+

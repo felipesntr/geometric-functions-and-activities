@@ -1,3 +1,5 @@
+module Intersect where
+
 type Point = (Float, Float)
 
 type Polygon = [Point]

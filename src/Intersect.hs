@@ -46,7 +46,7 @@ intersectsTwoLines
 
 -- | The 'intersectsLinePolygons' checks whether a line intersects a polygon.
 intersectsLinePolygons :: Line -> Polygon -> Bool
-intersectsLinePolygons line polygon = 
+intersectsLinePolygons line polygon =
   or [line `intersectsTwoLines` side | side <- zip polygon (tail polygon)]
 
 
@@ -54,9 +54,24 @@ intersectsLinePolygons line polygon =
 
 -- | The 'intersectsTwoPolygons' checks whether a polygon intersects another polygon.
 intersectsTwoPolygons :: Polygon -> Polygon -> Bool
-intersectsTwoPolygons polygon_1 polygon_2 = 
+intersectsTwoPolygons polygon_1 polygon_2 =
   or [ intersectsLinePolygons sideOfPolygon1 polygon_2 | sideOfPolygon1 <- zip polygon_1 (tail polygon_1) ]
 
 
--- 4
+-- 7
+
+-- | The 'intersectsTwoPolygons' returns the intersection point of two lines, if it exists.
+pointOfIntersectionTwoLines :: Line -> Line -> Point
+pointOfIntersectionTwoLines ((x_1, y_1), (x_2, y_2)) ((x_3, y_3), (x_4, y_4))
+  | intersectsTwoLines ((x_1, y_1), (x_2, y_2)) ((x_3, y_3), (x_4, y_4)) = (x, y)
+  | otherwise = error "Error: there is no intersection between the segments."
+  where 
+        -- coefficients
+        a_1 = (y_2 - y_1)/(x_2 - x_1)
+        c_1 = (-a_1) * x_1 + y_1
+        a_2 = (y_4-y_3)/(x_4-x_3)
+        c_2 = a_2 * x_3 + y_3
+        -- coordenates 
+        x = (c_2-c_1)/(a_1-a_2)
+        y = a_1 * x + c_1
 

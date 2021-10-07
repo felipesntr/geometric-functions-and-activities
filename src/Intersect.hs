@@ -60,7 +60,7 @@ intersectsTwoPolygons polygon_1 polygon_2 =
 
 -- 7
 
--- | The 'intersectsTwoPolygons' returns the intersection point of two lines, if it exists.
+-- | The 'pointOfIntersectionTwoLines' returns the intersection point of two lines, if it exists.
 pointOfIntersectionTwoLines :: Line -> Line -> Point
 pointOfIntersectionTwoLines ((x_1, y_1), (x_2, y_2)) ((x_3, y_3), (x_4, y_4))
   | intersectsTwoLines ((x_1, y_1), (x_2, y_2)) ((x_3, y_3), (x_4, y_4)) = (x, y)

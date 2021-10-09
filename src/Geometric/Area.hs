@@ -1,4 +1,4 @@
-module Area where
+module Geometric.Area where
 
 type Point = (Float, Float)
 

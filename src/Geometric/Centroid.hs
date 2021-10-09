@@ -1,5 +1,5 @@
-module Centroid where
-import Area
+module Geometric.Centroid where
+import Geometric.Area
 
 -- | The 'centroid' function return the centroid point of a polygon.
 centroid :: Polygon -> Point

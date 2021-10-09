@@ -1,7 +1,6 @@
 module Centroid where
 import Area
 
-
 -- | The 'centroid' function return the centroid point of a polygon.
 centroid :: Polygon -> Point
 centroid polygon = (c_x, c_y)

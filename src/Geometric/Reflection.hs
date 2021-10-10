@@ -1,6 +1,6 @@
-module Reflection where
+module Geometric.Reflection where
 
-import Intersect
+import Geometric.Intersect
 
 type Vector = (Point, Point)
 
@@ -13,7 +13,7 @@ type Norm  = Float
 -- |The "reflection" function returns the reflection vector if the vector intersects the line
 
 reflection :: Vector -> Line -> Vector
-reflection ((x_1,y_1),(x_2,y_2)) ((x_3,y_3),(x_4,y_4)) = 
+reflection ((x_1,y_1),(x_2,y_2)) ((x_3,y_3),(x_4,y_4))
     | intersectsTwoLines ((x_1,y_1),(x_2,y_2)) ((x_3,y_3),(x_4,y_4)) == true = (x_2,y_2) headOfVector
     | otherwise = error "do not intersect"
     where headOfVector = reflexVectorPoint ((x_1,y_1),(x_2,y_2)) resultantVec

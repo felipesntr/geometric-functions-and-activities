@@ -1,6 +1,6 @@
 module Geometric.Intersect where
 
-type Point = (Float, Float)
+type Point = (Double, Double)
 
 type Polygon = [Point]
 

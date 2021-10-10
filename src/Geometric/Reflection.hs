@@ -28,7 +28,7 @@ reflection ((x_1,y_1),(x_2,y_2)) ((x_3,y_3),(x_4,y_4))
 -- |The "reflexVectorPoint" function returns the "head" point of the reflex vector
 
 reflexVectorPoint :: Vector -> Vector -> Point
-reflexVectorPoint ((x_1,y_1),(x_2,y_2)) ((x_3,y_3),(x_4,y_4)) = ((x_3-x_1,y_3-y_1),(x_4-x_2,y_4-y_2))
+reflexVectorPoint ((x_1,y_1),(x_2,y_2)) ((x_3,y_3),(x_4,y_4)) = ((x_4-x_3)-(x_2-x_1),(y_4-y_3)-(y_2-y_1))
 
 -- |The "resultantVector" function returns the vector resulting from the sum of the vector with its reflection vector
 

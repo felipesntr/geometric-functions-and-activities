@@ -1,13 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 import CodeWorld
 
 type Angle = Double
-type Velocity = ( Double, Double )
-type World = ( Point, Velocity, Direction,  Rot, Bool) -- Bool para acelerando ou não
-type Rot = Char  -- 'a', 'h', 's'
+
+type Velocity = (Double, Double)
+
+type World = (Point, Velocity, Direction, Rot, Bool) -- Bool para acelerando ou não
+
+type Rot = Char -- 'a', 'h', 's'
+
 type Direction = Angle
+
 type Point = (Double, Double)
+
 type Polygon = [Point]
+
 type Line = (Point, Point)
 
 -- 1
@@ -76,68 +84,70 @@ pointOfIntersectionTwoLines ((x_1, y_1), (x_2, y_2)) ((x_3, y_3), (x_4, y_4))
     x = (c_2 - c_1) / (a_1 - a_2)
     y = a_1 * x + c_1
 
-
-
 -- | The 'areaPolygon' function return the area of a polygon.
 areaPolygon :: Polygon -> Float
 areaPolygon polygon =
-    abs (0.5 * sum [
-        (x_1*y_2) - (x_2*y_1) | ((x_1, y_1), (x_2, y_2)) <- pairList])
-    where
-        polygon' = polygon ++ take 1 polygon
-        pairList = zip polygon' (tail polygon')
+  abs
+    ( 0.5
+        * sum
+          [ (x_1 * y_2) - (x_2 * y_1) | ((x_1, y_1), (x_2, y_2)) <- pairList
+          ]
+    )
+  where
+    polygon' = polygon ++ take 1 polygon
+    pairList = zip polygon' (tail polygon')
 
 -- | The 'centroid' function return the centroid point of a polygon.
 centroid :: Polygon -> Point
 centroid polygon = (c_x, c_y)
-    where
-        c_x =  sum [  (x_1 + x_2) * (x_1*y_2 - x_2* y_1) | ((x_1, y_1), (x_2, y_2)) <- pairList ]
-                / (6 * areaPolygon polygon)
-        c_y =  sum [  (y_1 + y_2) * (x_1*y_2 - x_2*y_1) | ((x_1, y_1), (x_2, y_2)) <- pairList ]
-                / (6 * areaPolygon polygon)
-        polygon' = polygon ++ take 1 polygon
-        pairList = zip polygon' (tail polygon')
-
+  where
+    c_x =
+      sum [(x_1 + x_2) * (x_1 * y_2 - x_2 * y_1) | ((x_1, y_1), (x_2, y_2)) <- pairList]
+        / (6 * areaPolygon polygon)
+    c_y =
+      sum [(y_1 + y_2) * (x_1 * y_2 - x_2 * y_1) | ((x_1, y_1), (x_2, y_2)) <- pairList]
+        / (6 * areaPolygon polygon)
+    polygon' = polygon ++ take 1 polygon
+    pairList = zip polygon' (tail polygon')
 
 velocityLimit = (20, 20)
 
-velocityRot = 1.5*pi
+velocityRot = 1.5 * pi
 
 acelerationShip = 1
 
-ship = [(0,0), (1,2), (2,0)]
+ship = [(0, 0), (1, 2), (2, 0)]
 
 velocityLimitY = 0.12
+
 velocityLimitX = 0.12
 
 main = activityOf initial update view
 
-initial = ( centroid ship, (0, 0), pi/2, 's', False )
+initial = (centroid ship, (0, 0), pi / 2, 's', False)
 
 update :: Event -> World -> World
-update (KeyPress "Left") ( (x, y), (v_x, v_y), angle, rot, acelerating)    = ( (x, y), (v_x, v_y), angle, 'a', acelerating)
-update (KeyPress "Right") ( (x, y), (v_x, v_y), angle, rot, acelerating)   = ( (x, y), (v_x, v_y), angle, 'h', acelerating)
-update (KeyPress "Up")  ( (x, y), (v_x, v_y), angle, rot, acelerating)     = ( (x, y), (v_x, v_y), angle, rot, True)
-
-update (KeyRelease "Up") ( (x, y), (v_x, v_y), angle, rot, acelerating)    = ( (x, y), (v_x, v_y), angle, rot, False)
-update (KeyRelease "Left") ( (x, y), (v_x, v_y), angle, rot, acelerating)  = ( (x, y), (v_x, v_y), angle, 's', acelerating)
-update (KeyRelease "Right") ( (x, y), (v_x, v_y), angle, rot, acelerating) = ( (x, y), (v_x, v_y), angle, 's', acelerating)
-
-update (TimePassing t) ( (x, y), (v_x, v_y), angle, rot, acelerating)
-                          | rot == 'a'      = ( (x, y), (v_x, v_y), angle + t * velocityRot, rot, acelerating)
-                          | rot == 'h'      = ( (x, y), (v_x, v_y), angle - t * velocityRot, rot, acelerating)
-                          | acelerating     =
-                              if v_x <= velocityLimitX && v_y <= velocityLimitY then
-                                ( (x + v_x * cos angle, y + v_y * sin angle), (v_x + t * acelerationShip, v_y + t * acelerationShip), angle, rot, acelerating)
-                              else
-                                ( (x + v_x * cos angle, y + v_y * sin angle), (v_x, v_y), angle, rot, acelerating)
-                          | not acelerating && v_x >= 0 && v_y >= 0 = ( (x + v_x * cos angle, y + v_y * sin angle), (v_x - t*acelerationShip, v_y - t*acelerationShip), angle, rot, acelerating)
-                          |
-                          | otherwise       = ( (x, y), (v_x, v_y), angle, rot, acelerating)
+update (KeyPress "Left") ((x, y), (v_x, v_y), angle, rot, acelerating) = ((x, y), (v_x, v_y), angle, 'a', acelerating)
+update (KeyPress "Right") ((x, y), (v_x, v_y), angle, rot, acelerating) = ((x, y), (v_x, v_y), angle, 'h', acelerating)
+update (KeyPress "Up") ((x, y), (v_x, v_y), angle, rot, acelerating) = ((x, y), (v_x, v_y), angle, rot, True)
+update (KeyRelease "Up") ((x, y), (v_x, v_y), angle, rot, acelerating) = ((x, y), (v_x, v_y), angle, rot, False)
+update (KeyRelease "Left") ((x, y), (v_x, v_y), angle, rot, acelerating) = ((x, y), (v_x, v_y), angle, 's', acelerating)
+update (KeyRelease "Right") ((x, y), (v_x, v_y), angle, rot, acelerating) = ((x, y), (v_x, v_y), angle, 's', acelerating)
+update (TimePassing t) ((x, y), (v_x, v_y), angle, rot, acelerating)
+  | rot == 'a' = ((x, y), (v_x, v_y), angle + t * velocityRot, rot, acelerating)
+  | rot == 'h' = ((x, y), (v_x, v_y), angle - t * velocityRot, rot, acelerating)
+  | x >= 5 = ((-4.8, y), (v_x, v_y), angle, rot, acelerating)
+  | y >= 5 = ((x, (-4.8)), (v_x, v_y), angle, rot, acelerating)
+  | x <= (-5) = ((4.8, y), (v_x, v_y), angle, rot, acelerating)
+  | y <= (-5) = ((x, 4.8), (v_x, v_y), angle, rot, acelerating)
+  | acelerating =
+    if v_x <= velocityLimitX && v_y <= velocityLimitY
+      then ((x + v_x * cos (angle), y + v_y * sin (angle)), (v_x + t * acelerationShip, v_y + t * acelerationShip), angle, rot, acelerating)
+      else ((x + v_x * cos (angle), y + v_y * sin (angle)), (v_x, v_y), angle, rot, acelerating)
+  | not acelerating && v_x >= 0 && v_y >= 0 = ((x + v_x * cos (angle), y + v_y * sin (angle)), (v_x - t * acelerationShip, v_y - t * acelerationShip), angle, rot, acelerating)
+  | otherwise = ((x, y), (v_x, v_y), angle, rot, acelerating)
 update _ w = w
 
-
 view :: World -> Picture
-view ( (x, y), (v_x, v_y), angle, rot, acelerating) =
-                                  translated x y (colored red (rotated (angle - pi/2) (uncurry translated (centroid ship) (solidPolygon ship))))
-
+view ((x, y), (v_x, v_y), angle, rot, acelerating) =
+  translated x y (colored red (rotated (angle - pi / 2) (uncurry translated (centroid ship) (solidPolygon ship))))
